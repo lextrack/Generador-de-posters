@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de posters</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Generador de posters</h1>
+        <p class="subtitle">Convierte cualquier imagen en un póster gigante dividido en páginas imprimibles</p>
+        
+        <div class="upload-section">
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-text">Haz clic o arrastra tu imagen aquí</div>
+                <div class="upload-subtext">Formatos soportados: JPG, PNG, GIF</div>
+            </div>
+            <input type="file" id="fileInput" accept="image/*">
+        </div>
+
+        <div class="controls" id="controls">
+            <div class="control-group">
+                <label for="gridSize">Tamaño de cuadrícula:</label>
+                <select id="gridSize">
+                    <option value="2x2">2x2 (4 páginas)</option>
+                    <option value="3x3" selected>3x3 (9 páginas)</option>
+                    <option value="4x4">4x4 (16 páginas)</option>
+                    <option value="5x5">5x5 (25 páginas)</option>
+                    <option value="6x6">6x6 (36 páginas)</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label for="paperSize">Tamaño de papel:</label>
+                <select id="paperSize">
+                    <option value="a4" selected>A4</option>
+                    <option value="letter">Carta (Letter)</option>
+                    <option value="a3">A3</option>
+                </select>
+            </div>
+            
+
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <div>Procesando imagen...</div>
+        </div>
+
+        <div class="preview-section" id="previewSection">
+            <h2 class="preview-title">Vista previa del póster</h2>
+            <div class="preview-container">
+                <div class="preview-grid" id="previewGrid"></div>
+            </div>
+            
+            <div class="info-panel">
+                <div class="info-text" id="infoText"></div>
+            </div>
+        </div>
+
+        <div class="download-section" id="downloadSection">
+            <button class="download-btn" id="downloadBtn">📥 Descargar PDF</button>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
