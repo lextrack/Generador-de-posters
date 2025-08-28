@@ -25,7 +25,7 @@ Una aplicación web gratuita para convertir cualquier imagen en un póster gigan
 - **Imágenes:** JPG, PNG, GIF
 - **Papel:** A4 (210×297mm), Carta (216×279mm), A3 (297×420mm)
 - **Salida:** PDF de alta resolución
-```
+
 
 ## ⚙️ Características Técnicas
 
