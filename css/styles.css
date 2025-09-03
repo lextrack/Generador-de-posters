@@ -27,7 +27,7 @@ body {
 }
 
 footer {
-    background: #191c38;
+    background: #2a2e57;
     text-align: center;
     padding: 5px;
     font-size: 12px;
@@ -271,4 +271,5 @@ input[type="range"] {
     .control-group label {
         min-width: auto;
     }
+
 }
