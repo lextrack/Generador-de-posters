@@ -4,25 +4,25 @@ Una aplicación web gratuita para convertir cualquier imagen en un póster gigan
 
 ## Características
 
-- ** Interfaz moderna y responsive** - Diseño elegante que funciona en desktop y móviles
-- ** Múltiples formatos de papel** - A4, Carta (Letter) y A3
-- ** Tamaños de cuadrícula flexibles** - Desde 2x2 (4 páginas) hasta 6x6 (36 páginas)
-- ** Vista previa interactiva** - Ve exactamente cómo quedará cada página antes de imprimir
-- ** Procesamiento asíncrono** - Interfaz fluida con indicador de progreso en tiempo real
-- ** Información técnica detallada** - Dimensiones finales, resolución efectiva, factor de escala
-- ** Página de portada** - PDF incluye información completa del proyecto para referencia
-- ** Drag & Drop** - Arrastra y suelta imágenes directamente
-- ** Alta calidad** - Generación de PDF a 300 DPI para impresión profesional
+- **Interfaz moderna y responsive** - Diseño elegante que funciona en desktop y móviles
+- **Múltiples formatos de papel** - A4, Carta y A3
+- **Tamaños de cuadrícula flexibles** - Desde 2x2 hasta 6x6
+- **Vista previa interactiva** - Ve exactamente cómo quedará cada página antes de imprimir
+- **Procesamiento asíncrono** - Interfaz fluida con indicador de progreso en tiempo real
+- **Información técnica detallada** - Dimensiones finales, resolución efectiva, factor de escala
+- **Página de portada** - PDF incluye información completa del proyecto para referencia
+- **Drag & Drop** - Arrastra y suelta imágenes directamente
+- **Alta calidad** - Generación de PDF a 300 DPI para impresión profesional
 
 ## Uso
 
-1. **Subir imagen:** Haz clic o arrastra tu imagen (JPG, PNG, GIF)
+1. **Subir imagen:** Haz clic o arrastra tu imagen (JPG, PNG, WEBP, entre otros)
 2. **Configurar:** Selecciona el tamaño de cuadrícula y formato de papel
 3. **Previsualizar:** Revisa cómo quedará dividido tu póster
 4. **Descargar:** Obtén tu PDF listo para imprimir
 
 ### Formatos Soportados
-- **Imágenes:** JPG, PNG, GIF
+- **Imágenes:** JPG, PNG, WEBP
 - **Papel:** A4 (210×297mm), Carta (216×279mm), A3 (297×420mm)
 - **Salida:** PDF de alta resolución
 
@@ -51,8 +51,9 @@ Una aplicación web gratuita para convertir cualquier imagen en un póster gigan
 
 Este proyecto está bajo la Licencia MIT.
 
-## 🙏 Reconocimientos
+##  Reconocimientos
 
 - Inspirado en [BlockPoster](http://blockposters.com/)
 
 - Librería [jsPDF](https://github.com/parallax/jsPDF) para generación de PDFs
+
