@@ -1,20 +1,20 @@
-# Generador de Pósters 🖼️
+# Generador de Pósters
 
 Una aplicación web gratuita para convertir cualquier imagen en un póster gigante dividido en páginas imprimibles, similar a BlockPoster pero con interfaz más simple y gratutito.
 
-## ✨ Características
+## Características
 
-- **🎨 Interfaz moderna y responsive** - Diseño elegante que funciona en desktop y móviles
-- **📄 Múltiples formatos de papel** - A4, Carta (Letter) y A3
-- **🔧 Tamaños de cuadrícula flexibles** - Desde 2x2 (4 páginas) hasta 6x6 (36 páginas)
-- **👁️ Vista previa interactiva** - Ve exactamente cómo quedará cada página antes de imprimir
-- **⚡ Procesamiento asíncrono** - Interfaz fluida con indicador de progreso en tiempo real
-- **📊 Información técnica detallada** - Dimensiones finales, resolución efectiva, factor de escala
-- **📋 Página de portada** - PDF incluye información completa del proyecto para referencia
-- **🖱️ Drag & Drop** - Arrastra y suelta imágenes directamente
-- **💾 Alta calidad** - Generación de PDF a 300 DPI para impresión profesional
+- ** Interfaz moderna y responsive** - Diseño elegante que funciona en desktop y móviles
+- ** Múltiples formatos de papel** - A4, Carta (Letter) y A3
+- ** Tamaños de cuadrícula flexibles** - Desde 2x2 (4 páginas) hasta 6x6 (36 páginas)
+- ** Vista previa interactiva** - Ve exactamente cómo quedará cada página antes de imprimir
+- ** Procesamiento asíncrono** - Interfaz fluida con indicador de progreso en tiempo real
+- ** Información técnica detallada** - Dimensiones finales, resolución efectiva, factor de escala
+- ** Página de portada** - PDF incluye información completa del proyecto para referencia
+- ** Drag & Drop** - Arrastra y suelta imágenes directamente
+- ** Alta calidad** - Generación de PDF a 300 DPI para impresión profesional
 
-## 📋 Uso
+## Uso
 
 1. **Subir imagen:** Haz clic o arrastra tu imagen (JPG, PNG, GIF)
 2. **Configurar:** Selecciona el tamaño de cuadrícula y formato de papel
@@ -27,7 +27,7 @@ Una aplicación web gratuita para convertir cualquier imagen en un póster gigan
 - **Salida:** PDF de alta resolución
 
 
-## ⚙️ Características Técnicas
+## Características Técnicas
 
 ### Algoritmo de División
 - Cálculo automático de escala para ajustar imagen al área total
@@ -47,11 +47,12 @@ Una aplicación web gratuita para convertir cualquier imagen en un póster gigan
 - Gestión eficiente de memoria
 - Responsive design para todas las pantallas
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto está bajo la Licencia MIT.
 
 ## 🙏 Reconocimientos
 
 - Inspirado en [BlockPoster](http://blockposters.com/)
+
 - Librería [jsPDF](https://github.com/parallax/jsPDF) para generación de PDFs
