@@ -43,136 +43,36 @@ uploadArea.addEventListener('drop', (e) => {
     }
 });
 
-function updatePreview() {
-    if (!currentImage) return;
-
-    loading.style.display = 'block';
-    const loadingText = loading.querySelector('div:last-child');
-    loadingText.textContent = 'Procesando imagen... 0%';
-    
-    previewGrid.innerHTML = '';
-    canvasCells = [];
-
-    const [cols, rows] = gridSizeSelect.value.split('x').map(Number);
-    const paperSize = paperSizes[paperSizeSelect.value];
-    
-    previewGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-    
-    const totalPosterWidth = paperSize.width * cols;
-    const totalPosterHeight = paperSize.height * rows;
-    const scaleX = totalPosterWidth / currentImage.width;
-    const scaleY = totalPosterHeight / currentImage.height;
-    const scale = Math.min(scaleX, scaleY);
-    const scaledImageWidth = currentImage.width * scale;
-    const scaledImageHeight = currentImage.height * scale;
-    const offsetX = (totalPosterWidth - scaledImageWidth) / 2;
-    const offsetY = (totalPosterHeight - scaledImageHeight) / 2;
-    
-    const totalCells = rows * cols;
-    let processedCells = 0;
-
-    const processNextBatch = (startIndex) => {
-        const batchSize = 2;
-        const endIndex = Math.min(startIndex + batchSize, totalCells);
-        
-        for (let i = startIndex; i < endIndex; i++) {
-            const row = Math.floor(i / cols);
-            const col = i % cols;
-            
-            const cell = document.createElement('div');
-            cell.className = 'preview-cell';
-            cell.style.aspectRatio = `${paperSize.width}/${paperSize.height}`;
-            
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const canvasWidth = 200;
-            const canvasHeight = Math.round(canvasWidth * (paperSize.height / paperSize.width));
-            
-            canvas.width = canvasWidth;
-            canvas.height = canvasHeight;
-            canvas.style.width = '100%';
-            canvas.style.height = '100%';
-            
-            ctx.fillStyle = 'white';
-            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-            
-            const pageLeft = col * paperSize.width;
-            const pageTop = row * paperSize.height;
-            const pageRight = pageLeft + paperSize.width;
-            const pageBottom = pageTop + paperSize.height;
-            const srcLeft = (pageLeft - offsetX) / scale;
-            const srcTop = (pageTop - offsetY) / scale;
-            const srcRight = (pageRight - offsetX) / scale;
-            const srcBottom = (pageBottom - offsetY) / scale;
-            const intersectLeft = Math.max(0, srcLeft);
-            const intersectTop = Math.max(0, srcTop);
-            const intersectRight = Math.min(currentImage.width, srcRight);
-            const intersectBottom = Math.min(currentImage.height, srcBottom);
-            
-            if (intersectLeft < intersectRight && intersectTop < intersectBottom) {
-                const sourceWidth = intersectRight - intersectLeft;
-                const sourceHeight = intersectBottom - intersectTop;
-                
-                const drawLeft = Math.max(0, (offsetX + intersectLeft * scale - pageLeft));
-                const drawTop = Math.max(0, (offsetY + intersectTop * scale - pageTop));
-                const drawWidth = sourceWidth * scale;
-                const drawHeight = sourceHeight * scale;
-                
-                const canvasScale = canvasWidth / paperSize.width;
-                
-                ctx.drawImage(
-                    currentImage,
-                    intersectLeft, intersectTop, sourceWidth, sourceHeight,
-                    drawLeft * canvasScale, drawTop * canvasScale,
-                    drawWidth * canvasScale, drawHeight * canvasScale
-                );
-            }
-            
-            const numberDiv = document.createElement('div');
-            numberDiv.className = 'cell-number';
-            numberDiv.textContent = i + 1;
-            
-            cell.appendChild(canvas);
-            cell.appendChild(numberDiv);
-            previewGrid.appendChild(cell);
-            
-            canvasCells.push({
-                pageLeft, pageTop, pageRight, pageBottom,
-                scale, offsetX, offsetY,
-                number: i + 1
-            });
-        }
-        
-        processedCells = endIndex;
-        const progress = Math.round((processedCells / totalCells) * 100);
-        loadingText.textContent = `Procesando imagen... ${progress}%`;
-        
-        if (endIndex < totalCells) {
-            setTimeout(() => processNextBatch(endIndex), 10);
-        } else {
-            setTimeout(() => {
-                updateInfoPanel();
-                loading.style.display = 'none';
-            }, 100);
-        }
-    };
-    
-    setTimeout(() => processNextBatch(0), 10);
-}
-
 function handleFileSelect(event) {
     const file = event.target.files[0];
     if (!file) return;
+
+    const maxSize = 50 * 1024 * 1024;
+    if (file.size > maxSize) {
+        alert('El archivo es demasiado grande. Por favor, selecciona una imagen menor a 50MB.');
+        return;
+    }
 
     const reader = new FileReader();
     reader.onload = (e) => {
         const img = new Image();
         img.onload = () => {
+            if (img.width < 100 || img.height < 100) {
+                alert('La imagen es demasiado pequeña. Por favor, selecciona una imagen de al menos 100×100 píxeles.');
+                return;
+            }
+
             currentImage = img;
             showControls();
             updatePreview();
         };
+        img.onerror = () => {
+            alert('Error al cargar la imagen. Por favor, selecciona un archivo de imagen válido.');
+        };
         img.src = e.target.result;
+    };
+    reader.onerror = () => {
+        alert('Error al leer el archivo. Por favor, inténtalo de nuevo.');
     };
     reader.readAsDataURL(file);
 }
@@ -212,7 +112,11 @@ function updatePreview() {
     let processedCells = 0;
 
     const processNextBatch = (startIndex) => {
-        const batchSize = 2;
+        let batchSize = 2;
+        if (totalCells > 64) batchSize = 5;
+        else if (totalCells > 36) batchSize = 4;
+        else if (totalCells > 16) batchSize = 3;
+
         const endIndex = Math.min(startIndex + batchSize, totalCells);
         
         for (let i = startIndex; i < endIndex; i++) {
@@ -305,7 +209,7 @@ function updatePreview() {
 function updateInfoPanel() {
     const [cols, rows] = gridSizeSelect.value.split('x').map(Number);
     const paperSize = paperSizes[paperSizeSelect.value];
-    
+
     const totalPosterWidth = paperSize.width * cols;
     const totalPosterHeight = paperSize.height * rows;
     const scaleX = totalPosterWidth / currentImage.width;
@@ -313,15 +217,17 @@ function updateInfoPanel() {
     const scale = Math.min(scaleX, scaleY);
     const scaledImageWidth = currentImage.width * scale;
     const scaledImageHeight = currentImage.height * scale;
-    
+
     const totalPages = rows * cols;
     const finalSize = calculateFinalSize();
-    
+
     infoText.innerHTML = `
-        <strong>Total de páginas:</strong> ${totalPages}<br>
-        <strong>Tamaño final del póster:</strong> ${finalSize.width}cm × ${finalSize.height}cm<br>
-        <strong>Tamaño de la imagen en el póster:</strong> ${(scaledImageWidth/10).toFixed(1)}cm × ${(scaledImageHeight/10).toFixed(1)}cm<br>
-        <strong>Resolución original:</strong> ${currentImage.width} × ${currentImage.height}px<br>
+        <strong>Total de páginas:</strong> ${totalPages} páginas<br>
+        <strong>Cuadrícula:</strong> ${cols} columnas × ${rows} filas<br>
+        <strong>Tamaño del póster completo:</strong> ${finalSize.width} × ${finalSize.height} cm<br>
+        <strong>Tamaño de cada página:</strong> ${(paperSize.width/10).toFixed(1)} × ${(paperSize.height/10).toFixed(1)} cm<br>
+        <strong>Imagen escalada en el póster:</strong> ${(scaledImageWidth/10).toFixed(1)} × ${(scaledImageHeight/10).toFixed(1)} cm<br>
+        <strong>Resolución original:</strong> ${currentImage.width} × ${currentImage.height} px<br>
         <strong>Factor de escala:</strong> ${(scale * 100).toFixed(1)}%
     `;
 }
@@ -457,23 +363,23 @@ function createCoverPage(pdf, paperSize, cols, rows) {
         `Hora de creación: ${new Date().toLocaleTimeString('es-ES')}`,
         '',
         'CONFIGURACIÓN DEL PÓSTER:',
-        `• Cuadrícula seleccionada: ${cols} × ${rows}`,
-        `• Total de páginas: ${totalPages}`,
+        `• Cuadrícula: ${cols} columnas × ${rows} filas`,
+        `• Total de páginas: ${totalPages} páginas`,
         `• Formato de papel: ${paperSizeSelect.options[paperSizeSelect.selectedIndex].text}`,
-        `• Tamaño de papel: ${paperSize.width} × ${paperSize.height} mm`,
+        `• Tamaño de cada página: ${(paperSize.width/10).toFixed(1)} × ${(paperSize.height/10).toFixed(1)} cm`,
         '',
-        'DIMENSIONES FINALES:',
+        'DIMENSIONES FINALES DEL PÓSTER:',
         `• Tamaño total del póster: ${finalSize.width} × ${finalSize.height} cm`,
-        `• Área de impresión total: ${(totalPosterWidth/10).toFixed(1)} × ${(totalPosterHeight/10).toFixed(1)} cm`,
+        `• Tamaño total en milímetros: ${totalPosterWidth} × ${totalPosterHeight} mm`,
         '',
         'IMAGEN ORIGINAL:',
         `• Resolución: ${currentImage.width} × ${currentImage.height} píxeles`,
-        `• Proporción: ${(currentImage.width/currentImage.height).toFixed(2)}:1`,
+        `• Relación de aspecto: ${(currentImage.width/currentImage.height).toFixed(2)}:1`,
         '',
         'IMAGEN EN EL PÓSTER:',
         `• Tamaño escalado: ${(scaledImageWidth/10).toFixed(1)} × ${(scaledImageHeight/10).toFixed(1)} cm`,
         `• Factor de escala aplicado: ${(scale * 100).toFixed(1)}%`,
-        `• Resolución efectiva: ${(scale * 300).toFixed(0)} DPI`,
+        `• Resolución de impresión: ${(scale * 300).toFixed(0)} DPI`,
     ];
 
     info.forEach((line) => {
