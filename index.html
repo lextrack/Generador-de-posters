@@ -1,24 +1,24 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="description" content="Generador de posters usando imagenes gratutito">
+    <meta name="description" content="Generador de pósters usando imágenes gratuito">
     <meta name="author" content="Lextrack">
-    <title>Generador de posters</title>
+    <title>Generador de pósters</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="icon" href="icon.png" />
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Generador de posters</h1>
+        <h1>Generador de pósters</h1>
         <p class="subtitle">Convierte cualquier imagen en un póster gigante dividido en páginas imprimibles</p>
-        
+
         <div class="upload-section">
             <div class="upload-area" onclick="document.getElementById('fileInput').click()">
                 <div class="upload-text">Haz clic o arrastra tu imagen aquí</div>
-                <div class="upload-subtext">Formatos soportados: JPG, PNG, GIF</div>
+                <div class="upload-subtext">Formatos soportados: JPG, PNG, GIF, WEBP</div>
             </div>
             <input type="file" id="fileInput" accept="image/*">
         </div>
@@ -38,7 +38,7 @@
                     <option value="10x10">10x10 (100 páginas)</option>
                 </select>
             </div>
-            
+
             <div class="control-group">
                 <label for="paperSize">Tamaño de papel:</label>
                 <select id="paperSize">
@@ -59,7 +59,7 @@
             <div class="preview-container">
                 <div class="preview-grid" id="previewGrid"></div>
             </div>
-            
+
             <div class="info-panel">
                 <div class="info-text" id="infoText"></div>
             </div>
@@ -71,12 +71,10 @@
     </div>
 
     <footer>
-        &copy; <script>document.write(new Date().getFullYear())</script>.  Generador de Posters | 
+        &copy; <script>document.write(new Date().getFullYear())</script>. Generador de Pósters |
         <a href="https://github.com/lextrack/Generador-de-posters" target="_blank" rel="noopener noreferrer">Lextrack</a>
     </footer>
 
-    <script src="js/script.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>
-
-

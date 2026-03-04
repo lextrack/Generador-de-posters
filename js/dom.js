@@ -1,0 +1,11 @@
+export const fileInput = document.getElementById('fileInput');
+export const uploadArea = document.querySelector('.upload-area');
+export const controls = document.getElementById('controls');
+export const previewSection = document.getElementById('previewSection');
+export const downloadSection = document.getElementById('downloadSection');
+export const previewGrid = document.getElementById('previewGrid');
+export const loading = document.getElementById('loading');
+export const gridSizeSelect = document.getElementById('gridSize');
+export const paperSizeSelect = document.getElementById('paperSize');
+export const infoText = document.getElementById('infoText');
+export const downloadBtn = document.getElementById('downloadBtn');
