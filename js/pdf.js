@@ -2,6 +2,7 @@ import { FINISH_DELAY_MS, PDF_DPI } from './config.js';
 import { downloadBtn } from './dom.js';
 import { calculateFinalSize, calculatePageBounds, computePageSlice, drawPageSlice } from './render-utils.js';
 import { getCanvasCells, getCurrentJob } from './state.js';
+import { getLocale, t } from './i18n.js';
 
 function drawPdfPage(pdf, job, cellData, totalPages) {
     const pdfCanvas = document.createElement('canvas');
@@ -36,14 +37,14 @@ function createCoverPage(pdf, job) {
     pdf.setFontSize(24);
     pdf.setTextColor(40, 40, 40);
 
-    const title = 'Generador de posters';
+    const title = t('pdfTitle');
     const titleWidth = pdf.getTextWidth(title);
     const centerX = job.paperSize.width / 2;
     pdf.text(title, centerX - titleWidth / 2, 40);
 
     pdf.setFontSize(16);
     pdf.setTextColor(100, 100, 100);
-    const subtitle = 'Información técnica del póster';
+    const subtitle = t('pdfSubtitle');
     const subtitleWidth = pdf.getTextWidth(subtitle);
     pdf.text(subtitle, centerX - subtitleWidth / 2, 55);
 
@@ -54,38 +55,52 @@ function createCoverPage(pdf, job) {
     pdf.setFontSize(12);
     pdf.setTextColor(60, 60, 60);
 
+    const now = new Date();
+    const locale = getLocale();
     const startY = 90;
     const lineHeight = 8;
     let currentY = startY;
 
     const info = [
-        `Fecha de creación: ${new Date().toLocaleDateString('es-ES')}`,
-        `Hora de creación: ${new Date().toLocaleTimeString('es-ES')}`,
+        t('pdfDate', { value: now.toLocaleDateString(locale) }),
+        t('pdfTime', { value: now.toLocaleTimeString(locale) }),
         '',
-        'CONFIGURACIÓN DEL PÓSTER:',
-        `• Cuadrícula: ${job.cols} columnas × ${job.rows} filas`,
-        `• Total de páginas: ${totalPages} páginas`,
-        `• Formato de papel: ${job.paperLabel}`,
-        `• Tamaño de cada página: ${(job.paperSize.width / 10).toFixed(1)} × ${(job.paperSize.height / 10).toFixed(1)} cm`,
+        t('pdfConfigSection'),
+        t('pdfGrid', { cols: job.cols, rows: job.rows }),
+        t('pdfTotalPages', { totalPages }),
+        t('pdfPaperFormat', { paperLabel: job.paperLabel }),
+        t('pdfPageSize', {
+            width: (job.paperSize.width / 10).toFixed(1),
+            height: (job.paperSize.height / 10).toFixed(1)
+        }),
         '',
-        'DIMENSIONES FINALES DEL PÓSTER:',
-        `• Tamaño total del póster: ${finalSize.width.toFixed(1)} × ${finalSize.height.toFixed(1)} cm`,
-        `• Tamaño total en milímetros: ${job.metrics.totalPosterWidth} × ${job.metrics.totalPosterHeight} mm`,
+        t('pdfFinalSection'),
+        t('pdfPosterSize', {
+            width: finalSize.width.toFixed(1),
+            height: finalSize.height.toFixed(1)
+        }),
+        t('pdfPosterSizeMm', {
+            width: job.metrics.totalPosterWidth,
+            height: job.metrics.totalPosterHeight
+        }),
         '',
-        'IMAGEN ORIGINAL:',
-        `• Resolución: ${job.image.width} × ${job.image.height} píxeles`,
-        `• Relación de aspecto: ${(job.image.width / job.image.height).toFixed(2)}:1`,
+        t('pdfOriginalSection'),
+        t('pdfResolution', { width: job.image.width, height: job.image.height }),
+        t('pdfAspectRatio', { value: (job.image.width / job.image.height).toFixed(2) }),
         '',
-        'IMAGEN EN EL PÓSTER:',
-        `• Tamaño escalado: ${(job.metrics.scaledImageWidth / 10).toFixed(1)} × ${(job.metrics.scaledImageHeight / 10).toFixed(1)} cm`,
-        `• Factor de escala aplicado: ${(job.metrics.scale * 100).toFixed(1)}%`,
-        `• Resolución de impresión: ${job.metrics.printDpi.toFixed(0)} DPI`
+        t('pdfPosterImageSection'),
+        t('pdfScaledSize', {
+            width: (job.metrics.scaledImageWidth / 10).toFixed(1),
+            height: (job.metrics.scaledImageHeight / 10).toFixed(1)
+        }),
+        t('pdfScaleFactor', { value: (job.metrics.scale * 100).toFixed(1) }),
+        t('pdfDpi', { value: job.metrics.printDpi.toFixed(0) })
     ];
 
     info.forEach((line) => {
         if (line === '') {
             currentY += lineHeight * 0.5;
-        } else if (line.includes(':') && !line.startsWith('•')) {
+        } else if (line.endsWith(':') && !line.startsWith('-')) {
             pdf.setFont('helvetica', 'bold');
             pdf.text(line, 20, currentY);
             pdf.setFont('helvetica', 'normal');
@@ -96,46 +111,9 @@ function createCoverPage(pdf, job) {
         }
     });
 
-    if (currentY < job.paperSize.height - 80) {
-        const previewSize = 60;
-        const previewX = centerX - previewSize / 2;
-        const previewY = job.paperSize.height - 70;
-
-        pdf.setDrawColor(150, 150, 150);
-        pdf.setLineWidth(0.5);
-        pdf.rect(previewX, previewY, previewSize, previewSize);
-
-        const thumbCanvas = document.createElement('canvas');
-        const thumbCtx = thumbCanvas.getContext('2d');
-        const thumbSize = 200;
-
-        thumbCanvas.width = thumbSize;
-        thumbCanvas.height = thumbSize;
-
-        thumbCtx.fillStyle = 'white';
-        thumbCtx.fillRect(0, 0, thumbSize, thumbSize);
-
-        const thumbScale = Math.min(thumbSize / job.image.width, thumbSize / job.image.height);
-        const thumbWidth = job.image.width * thumbScale;
-        const thumbHeight = job.image.height * thumbScale;
-        const thumbOffsetX = (thumbSize - thumbWidth) / 2;
-        const thumbOffsetY = (thumbSize - thumbHeight) / 2;
-
-        thumbCtx.drawImage(job.image, thumbOffsetX, thumbOffsetY, thumbWidth, thumbHeight);
-
-        const thumbData = thumbCanvas.toDataURL('image/jpeg', 0.8);
-        pdf.addImage(thumbData, 'JPEG', previewX, previewY, previewSize, previewSize);
-
-        pdf.setFontSize(10);
-        pdf.setTextColor(100, 100, 100);
-        const previewLabel = 'Vista previa de la imagen';
-        const previewLabelWidth = pdf.getTextWidth(previewLabel);
-        pdf.text(previewLabel, centerX - previewLabelWidth / 2, previewY + previewSize + 10);
-    }
-
     pdf.setFontSize(8);
     pdf.setTextColor(150, 150, 150);
-    const footer = 'Generado con Generador de Posters';
+    const footer = t('pdfFooter');
     const footerWidth = pdf.getTextWidth(footer);
     pdf.text(footer, centerX - footerWidth / 2, job.paperSize.height - 10);
 }
@@ -148,7 +126,7 @@ export function generatePDF() {
     const totalPages = cells.length;
 
     downloadBtn.disabled = true;
-    downloadBtn.textContent = 'Generando PDF...';
+    downloadBtn.textContent = t('generatingPdf');
 
     setTimeout(() => {
         const { jsPDF } = window.jspdf;
@@ -165,6 +143,6 @@ export function generatePDF() {
         pdf.save(filename);
 
         downloadBtn.disabled = false;
-        downloadBtn.textContent = 'Descargar PDF';
+        downloadBtn.textContent = t('downloadPdf');
     }, FINISH_DELAY_MS);
 }

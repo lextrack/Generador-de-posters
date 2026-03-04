@@ -6,26 +6,35 @@
     <meta name="description" content="Generador de pósters usando imágenes gratuito">
     <meta name="author" content="Lextrack">
     <title>Generador de pósters</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="icon" href="icon.png" />
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Generador de pósters</h1>
-        <p class="subtitle">Convierte cualquier imagen en un póster gigante dividido en páginas imprimibles</p>
+    <div class="app-container">
+        <h1 id="appTitle">Generador de pósters</h1>
+        <p class="subtitle" id="appSubtitle">Convierte cualquier imagen en un póster gigante dividido en páginas imprimibles</p>
+
+        <div class="control-group language-group">
+            <label for="languageSelect" id="languageLabel">Idioma:</label>
+            <select id="languageSelect">
+                <option value="es">Español</option>
+                <option value="en">English</option>
+            </select>
+        </div>
 
         <div class="upload-section">
             <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-                <div class="upload-text">Haz clic o arrastra tu imagen aquí</div>
-                <div class="upload-subtext">Formatos soportados: JPG, PNG, GIF, WEBP</div>
+                <div class="upload-text" id="uploadText">Haz clic o arrastra tu imagen aquí</div>
+                <div class="upload-subtext" id="uploadSubtext">Formatos soportados: JPG, PNG, GIF, WEBP</div>
             </div>
             <input type="file" id="fileInput" accept="image/*">
         </div>
 
         <div class="controls" id="controls">
             <div class="control-group">
-                <label for="gridSize">Tamaño de cuadrícula:</label>
+                <label for="gridSize" id="gridSizeLabel">Tamaño de cuadrícula:</label>
                 <select id="gridSize">
                     <option value="2x2">2x2 (4 páginas)</option>
                     <option value="3x3" selected>3x3 (9 páginas)</option>
@@ -40,7 +49,7 @@
             </div>
 
             <div class="control-group">
-                <label for="paperSize">Tamaño de papel:</label>
+                <label for="paperSize" id="paperSizeLabel">Tamaño de papel:</label>
                 <select id="paperSize">
                     <option value="a4" selected>A4</option>
                     <option value="letter">Carta (Letter)</option>
@@ -51,11 +60,11 @@
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <div>Procesando imagen...</div>
+            <div id="loadingText">Procesando imagen...</div>
         </div>
 
         <div class="preview-section" id="previewSection">
-            <h2 class="preview-title">Vista previa del póster</h2>
+            <h2 class="preview-title" id="previewTitle">Vista previa del póster</h2>
             <div class="preview-container">
                 <div class="preview-grid" id="previewGrid"></div>
             </div>
@@ -71,7 +80,7 @@
     </div>
 
     <footer>
-        &copy; <script>document.write(new Date().getFullYear())</script>. Generador de Pósters |
+        &copy; <script>document.write(new Date().getFullYear())</script>. <span id="footerText">Generador de Pósters</span> |
         <a href="https://github.com/lextrack/Generador-de-posters" target="_blank" rel="noopener noreferrer">Lextrack</a>
     </footer>
 

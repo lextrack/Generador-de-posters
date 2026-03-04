@@ -24,6 +24,7 @@ import {
     setCanvasCells,
     setCurrentJob
 } from './state.js';
+import { t } from './i18n.js';
 
 export function showControls() {
     controls.style.display = 'block';
@@ -77,8 +78,8 @@ export function updatePreview() {
     setCurrentJob(job);
 
     loading.style.display = 'block';
-    const loadingText = loading.querySelector('div:last-child');
-    loadingText.textContent = 'Procesando imagen... 0%';
+    const loadingLabel = loading.querySelector('div:last-child');
+    loadingLabel.textContent = t('loadingImage', { progress: 0 });
 
     previewGrid.innerHTML = '';
     setCanvasCells([]);
@@ -103,7 +104,7 @@ export function updatePreview() {
         }
 
         const progress = Math.round((endIndex / totalCells) * 100);
-        loadingText.textContent = `Procesando imagen... ${progress}%`;
+        loadingLabel.textContent = t('loadingImage', { progress });
 
         if (endIndex < totalCells) {
             setTimeout(() => processNextBatch(endIndex), PROCESS_DELAY_MS);
@@ -127,13 +128,13 @@ export function updateInfoPanel(job = getCurrentJob()) {
     const finalSize = calculateFinalSize(job);
 
     infoText.innerHTML = `
-        <strong>Total de páginas:</strong> ${totalPages} páginas<br>
-        <strong>Cuadrícula:</strong> ${job.cols} columnas × ${job.rows} filas<br>
-        <strong>Tamaño del póster completo:</strong> ${finalSize.width.toFixed(1)} × ${finalSize.height.toFixed(1)} cm<br>
-        <strong>Tamaño de cada página:</strong> ${(job.paperSize.width / 10).toFixed(1)} × ${(job.paperSize.height / 10).toFixed(1)} cm<br>
-        <strong>Imagen escalada en el póster:</strong> ${(job.metrics.scaledImageWidth / 10).toFixed(1)} × ${(job.metrics.scaledImageHeight / 10).toFixed(1)} cm<br>
-        <strong>Resolución original:</strong> ${job.image.width} × ${job.image.height} px<br>
-        <strong>Factor de escala:</strong> ${(job.metrics.scale * 100).toFixed(1)}%<br>
-        <strong>Resolución efectiva de impresión:</strong> ${job.metrics.printDpi.toFixed(0)} DPI
+        <strong>${t('infoTotalPages')}</strong> ${totalPages} ${t('infoPages')}<br>
+        <strong>${t('infoGrid')}</strong> ${t('infoGridValue', { cols: job.cols, rows: job.rows })}<br>
+        <strong>${t('infoPosterSize')}</strong> ${finalSize.width.toFixed(1)} x ${finalSize.height.toFixed(1)} cm<br>
+        <strong>${t('infoPageSize')}</strong> ${(job.paperSize.width / 10).toFixed(1)} x ${(job.paperSize.height / 10).toFixed(1)} cm<br>
+        <strong>${t('infoScaledImage')}</strong> ${(job.metrics.scaledImageWidth / 10).toFixed(1)} x ${(job.metrics.scaledImageHeight / 10).toFixed(1)} cm<br>
+        <strong>${t('infoOriginalResolution')}</strong> ${job.image.width} x ${job.image.height} px<br>
+        <strong>${t('infoScaleFactor')}</strong> ${(job.metrics.scale * 100).toFixed(1)}%<br>
+        <strong>${t('infoPrintDpi')}</strong> ${job.metrics.printDpi.toFixed(0)} DPI
     `;
 }
