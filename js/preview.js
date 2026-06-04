@@ -10,13 +10,13 @@ import {
     previewSection
 } from './dom.js';
 import {
-    calculateFinalSize,
     calculatePageBounds,
     computePageSlice,
     createRenderJob,
     drawPageSlice,
     getBatchSize
 } from './render-utils.js';
+import { createInfoPanelModel } from './info-panel.js';
 import {
     getCurrentImage,
     getCurrentJob,
@@ -124,17 +124,45 @@ export function updatePreview() {
 export function updateInfoPanel(job = getCurrentJob()) {
     if (!job) return;
 
-    const totalPages = job.rows * job.cols;
-    const finalSize = calculateFinalSize(job);
+    const model = createInfoPanelModel(job);
+    const qualityLabel = t(model.quality.labelKey);
+    const gridValue = t('infoGridValue', model.grid);
+
+    const lowDpiWarning = model.quality.showWarning
+        ? `
+            <div class="metric-card warning-card">
+                <span class="metric-label">${t('infoAttention')}</span>
+                <div class="metric-value">${t('infoLowDpiWarning')}</div>
+            </div>
+        `
+        : '';
 
     infoText.innerHTML = `
-        <strong>${t('infoTotalPages')}</strong> ${totalPages} ${t('infoPages')}<br>
-        <strong>${t('infoGrid')}</strong> ${t('infoGridValue', { cols: job.cols, rows: job.rows })}<br>
-        <strong>${t('infoPosterSize')}</strong> ${finalSize.width.toFixed(1)} x ${finalSize.height.toFixed(1)} cm<br>
-        <strong>${t('infoPageSize')}</strong> ${(job.paperSize.width / 10).toFixed(1)} x ${(job.paperSize.height / 10).toFixed(1)} cm<br>
-        <strong>${t('infoScaledImage')}</strong> ${(job.metrics.scaledImageWidth / 10).toFixed(1)} x ${(job.metrics.scaledImageHeight / 10).toFixed(1)} cm<br>
-        <strong>${t('infoOriginalResolution')}</strong> ${job.image.width} x ${job.image.height} px<br>
-        <strong>${t('infoScaleFactor')}</strong> ${(job.metrics.scale * 100).toFixed(1)}%<br>
-        <strong>${t('infoPrintDpi')}</strong> ${job.metrics.printDpi.toFixed(0)} DPI
+        <div class="metric-card">
+            <span class="metric-label">${t('infoTotalPages')}</span>
+            <div class="metric-value">${model.totalPages} ${t('infoPages')}</div>
+            <div class="metric-subvalue">${gridValue}</div>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">${t('infoPosterSize')}</span>
+            <div class="metric-value">${model.finalSize.width.toFixed(1)} x ${model.finalSize.height.toFixed(1)} cm</div>
+            <div class="metric-subvalue">${t('infoPageSize')} ${model.pageSizeCm.width} x ${model.pageSizeCm.height} cm</div>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">${t('infoPrintDpi')}</span>
+            <div class="metric-value">${model.printDpi} DPI</div>
+            <div class="metric-subvalue"><span class="quality-badge ${model.quality.className}">${qualityLabel}</span></div>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">${t('infoOriginalResolution')}</span>
+            <div class="metric-value">${model.originalResolution.width} x ${model.originalResolution.height} px</div>
+            <div class="metric-subvalue">${t('infoScaledImage')} ${model.scaledImageCm.width} x ${model.scaledImageCm.height} cm</div>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">${t('infoScaleFactor')}</span>
+            <div class="metric-value">${model.scalePercent}%</div>
+            <div class="metric-subvalue">${t('infoGrid')} ${gridValue}</div>
+        </div>
+        ${lowDpiWarning}
     `;
 }

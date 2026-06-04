@@ -12,26 +12,26 @@ export function handleFileSelect(event) {
         return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-            if (img.width < 100 || img.height < 100) {
-                alert(t('alertTooSmall'));
-                return;
-            }
+    const imageUrl = URL.createObjectURL(file);
+    const img = new Image();
 
-            setCurrentImage(img);
-            showControls();
-            updatePreview();
-        };
-        img.onerror = () => {
-            alert(t('alertInvalidImage'));
-        };
-        img.src = e.target.result;
+    img.onload = () => {
+        if (img.width < 100 || img.height < 100) {
+            URL.revokeObjectURL(imageUrl);
+            alert(t('alertTooSmall'));
+            return;
+        }
+
+        setCurrentImage(img);
+        showControls();
+        updatePreview();
+        URL.revokeObjectURL(imageUrl);
     };
-    reader.onerror = () => {
-        alert(t('alertReadError'));
+
+    img.onerror = () => {
+        URL.revokeObjectURL(imageUrl);
+        alert(t('alertInvalidImage'));
     };
-    reader.readAsDataURL(file);
+
+    img.src = imageUrl;
 }

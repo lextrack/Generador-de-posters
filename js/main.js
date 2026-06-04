@@ -12,6 +12,12 @@ fileInput.addEventListener('change', handleFileSelect);
 gridSizeSelect.addEventListener('change', updatePreview);
 paperSizeSelect.addEventListener('change', updatePreview);
 downloadBtn.addEventListener('click', generatePDF);
+uploadArea.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        fileInput.click();
+    }
+});
 languageSelect.addEventListener('change', (e) => {
     setLanguage(e.target.value);
     const currentJob = getCurrentJob();

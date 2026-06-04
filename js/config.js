@@ -1,4 +1,6 @@
-export const PDF_DPI = 300;
+export const PDF_MAX_DPI = 240;
+export const PDF_MIN_DPI = 140;
+export const PDF_JPEG_QUALITY = 0.82;
 export const PROCESS_DELAY_MS = 10;
 export const FINISH_DELAY_MS = 100;
 

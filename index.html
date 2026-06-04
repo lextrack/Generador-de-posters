@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Generador de pósters usando imágenes gratuito">
     <meta name="author" content="Lextrack">
     <title>Generador de pósters</title>
@@ -12,70 +12,105 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div class="app-container">
-        <h1 id="appTitle">Generador de pósters</h1>
-        <p class="subtitle" id="appSubtitle">Convierte cualquier imagen en un póster gigante dividido en páginas imprimibles</p>
+    <div class="page-shell">
+        <div class="page-glow page-glow-left"></div>
+        <div class="page-glow page-glow-right"></div>
 
-        <div class="control-group language-group">
-            <label for="languageSelect" id="languageLabel">Idioma:</label>
-            <select id="languageSelect">
-                <option value="es">Español</option>
-                <option value="en">English</option>
-            </select>
-        </div>
-
-        <div class="upload-section">
-            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-                <div class="upload-text" id="uploadText">Haz clic o arrastra tu imagen aquí</div>
-                <div class="upload-subtext" id="uploadSubtext">Formatos soportados: JPG, PNG, GIF, WEBP</div>
-            </div>
-            <input type="file" id="fileInput" accept="image/*">
-        </div>
-
-        <div class="controls" id="controls">
-            <div class="control-group">
-                <label for="gridSize" id="gridSizeLabel">Tamaño de cuadrícula:</label>
-                <select id="gridSize">
-                    <option value="2x2">2x2 (4 páginas)</option>
-                    <option value="3x3" selected>3x3 (9 páginas)</option>
-                    <option value="4x4">4x4 (16 páginas)</option>
-                    <option value="5x5">5x5 (25 páginas)</option>
-                    <option value="6x6">6x6 (36 páginas)</option>
-                    <option value="7x7">7x7 (49 páginas)</option>
-                    <option value="8x8">8x8 (64 páginas)</option>
-                    <option value="9x9">9x9 (81 páginas)</option>
-                    <option value="10x10">10x10 (100 páginas)</option>
-                </select>
+        <div class="app-container">
+            <div class="topbar">
+                <div class="control-group language-group">
+                    <label for="languageSelect" id="languageLabel">Idioma:</label>
+                    <select id="languageSelect">
+                        <option value="es">Español</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="control-group">
-                <label for="paperSize" id="paperSizeLabel">Tamaño de papel:</label>
-                <select id="paperSize">
-                    <option value="a4" selected>A4</option>
-                    <option value="letter">Carta (Letter)</option>
-                    <option value="a3">A3</option>
-                </select>
+            <section class="hero-section">
+                <div class="hero-copy">
+                    <h1 id="appTitle">Generador de pósters</h1>
+                    <p class="subtitle" id="appSubtitle">Convierte cualquier imagen en un póster gigante dividido en páginas imprimibles</p>
+                </div>
+            </section>
+
+            <div class="upload-section">
+                <label class="upload-area" for="fileInput" tabindex="0" role="button">
+                    <div class="upload-text" id="uploadText">Haz clic o arrastra tu imagen aquí</div>
+                    <div class="upload-subtext" id="uploadSubtext">Formatos soportados: JPG, PNG, GIF, WEBP</div>
+                    <div class="upload-cta" id="uploadCta">Seleccionar imagen</div>
+                </label>
+                <div class="upload-hints">
+                    <span class="hint-pill" id="hintPillOne">Hasta 50 MB</span>
+                    <span class="hint-pill" id="hintPillTwo">Vista previa por páginas</span>
+                    <span class="hint-pill" id="hintPillThree">Calidad estimada antes de exportar</span>
+                </div>
+                <input type="file" id="fileInput" accept="image/*">
             </div>
-        </div>
 
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <div id="loadingText">Procesando imagen...</div>
-        </div>
+            <div class="controls" id="controls">
+                <div class="controls-header">
+                    <div>
+                        <p class="controls-eyebrow" id="controlsEyebrow">Configuración</p>
+                        <h2 class="controls-title" id="controlsTitle">Ajusta tu póster antes de exportar</h2>
+                    </div>
+                </div>
 
-        <div class="preview-section" id="previewSection">
-            <h2 class="preview-title" id="previewTitle">Vista previa del póster</h2>
-            <div class="preview-container">
-                <div class="preview-grid" id="previewGrid"></div>
+                <div class="controls-grid">
+                    <div class="control-card">
+                        <label for="gridSize" id="gridSizeLabel">Tamaño de cuadrícula:</label>
+                        <select id="gridSize">
+                            <option value="2x2">2x2 (4 páginas)</option>
+                            <option value="3x3" selected>3x3 (9 páginas)</option>
+                            <option value="4x4">4x4 (16 páginas)</option>
+                            <option value="5x5">5x5 (25 páginas)</option>
+                            <option value="6x6">6x6 (36 páginas)</option>
+                            <option value="7x7">7x7 (49 páginas)</option>
+                            <option value="8x8">8x8 (64 páginas)</option>
+                            <option value="9x9">9x9 (81 páginas)</option>
+                            <option value="10x10">10x10 (100 páginas)</option>
+                        </select>
+                    </div>
+
+                    <div class="control-card">
+                        <label for="paperSize" id="paperSizeLabel">Tamaño de papel:</label>
+                        <select id="paperSize">
+                            <option value="a4" selected>A4</option>
+                            <option value="letter">Carta (Letter)</option>
+                            <option value="a3">A3</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
-            <div class="info-panel">
-                <div class="info-text" id="infoText"></div>
+            <div class="loading" id="loading" aria-live="polite">
+                <div class="spinner"></div>
+                <div id="loadingText">Procesando imagen...</div>
             </div>
-        </div>
 
-        <div class="download-section" id="downloadSection">
-            <button class="download-btn" id="downloadBtn">Descargar PDF</button>
+            <div class="preview-section" id="previewSection">
+                <div class="preview-header">
+                    <div>
+                        <p class="preview-eyebrow" id="previewEyebrow">Resultado</p>
+                        <h2 class="preview-title" id="previewTitle">Vista previa del póster</h2>
+                    </div>
+                </div>
+
+                <div class="preview-layout">
+                    <div class="preview-container">
+                        <div class="preview-grid" id="previewGrid"></div>
+                    </div>
+
+                    <div class="info-panel">
+                        <div class="info-text" id="infoText"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="download-section" id="downloadSection">
+                <div class="print-notice" id="printNotice">Imprime el PDF a tamaño real / 100% para mantener las medidas correctas.</div>
+                <button class="download-btn" id="downloadBtn">Descargar PDF</button>
+            </div>
         </div>
     </div>
 
