@@ -5,6 +5,8 @@ import { generatePDF } from './pdf.js';
 import { initI18n, setLanguage } from './i18n.js';
 import { getCurrentJob } from './state.js';
 
+document.getElementById('currentYear').textContent = new Date().getFullYear();
+
 const initialLanguage = initI18n();
 languageSelect.value = initialLanguage;
 

@@ -32,6 +32,42 @@ export function showControls() {
     downloadSection.style.display = 'block';
 }
 
+function createMetricCard({ label, value, subvalue, badgeClassName, badgeText, isWarning = false }) {
+    const card = document.createElement('div');
+    card.className = isWarning ? 'metric-card warning-card' : 'metric-card';
+
+    const labelNode = document.createElement('span');
+    labelNode.className = 'metric-label';
+    labelNode.textContent = label;
+    card.appendChild(labelNode);
+
+    const valueNode = document.createElement('div');
+    valueNode.className = 'metric-value';
+    valueNode.textContent = value;
+    card.appendChild(valueNode);
+
+    if (badgeClassName && badgeText) {
+        const subvalueNode = document.createElement('div');
+        subvalueNode.className = 'metric-subvalue';
+
+        const badge = document.createElement('span');
+        badge.className = `quality-badge ${badgeClassName}`;
+        badge.textContent = badgeText;
+        subvalueNode.appendChild(badge);
+        card.appendChild(subvalueNode);
+        return card;
+    }
+
+    if (subvalue) {
+        const subvalueNode = document.createElement('div');
+        subvalueNode.className = 'metric-subvalue';
+        subvalueNode.textContent = subvalue;
+        card.appendChild(subvalueNode);
+    }
+
+    return card;
+}
+
 function createPreviewCell(job, row, col, number) {
     const cell = document.createElement('div');
     cell.className = 'preview-cell';
@@ -127,42 +163,44 @@ export function updateInfoPanel(job = getCurrentJob()) {
     const model = createInfoPanelModel(job);
     const qualityLabel = t(model.quality.labelKey);
     const gridValue = t('infoGridValue', model.grid);
+    const cards = [
+        createMetricCard({
+            label: t('infoTotalPages'),
+            value: `${model.totalPages} ${t('infoPages')}`,
+            subvalue: gridValue
+        }),
+        createMetricCard({
+            label: t('infoPosterSize'),
+            value: `${model.finalSize.width.toFixed(1)} x ${model.finalSize.height.toFixed(1)} cm`,
+            subvalue: `${t('infoPageSize')} ${model.pageSizeCm.width} x ${model.pageSizeCm.height} cm`
+        }),
+        createMetricCard({
+            label: t('infoPrintDpi'),
+            value: `${model.printDpi} DPI`,
+            badgeClassName: model.quality.className,
+            badgeText: qualityLabel
+        }),
+        createMetricCard({
+            label: t('infoOriginalResolution'),
+            value: `${model.originalResolution.width} x ${model.originalResolution.height} px`,
+            subvalue: `${t('infoScaledImage')} ${model.scaledImageCm.width} x ${model.scaledImageCm.height} cm`
+        }),
+        createMetricCard({
+            label: t('infoScaleFactor'),
+            value: `${model.scalePercent}%`,
+            subvalue: `${t('infoGrid')} ${gridValue}`
+        })
+    ];
 
-    const lowDpiWarning = model.quality.showWarning
-        ? `
-            <div class="metric-card warning-card">
-                <span class="metric-label">${t('infoAttention')}</span>
-                <div class="metric-value">${t('infoLowDpiWarning')}</div>
-            </div>
-        `
-        : '';
+    if (model.quality.showWarning) {
+        cards.push(
+            createMetricCard({
+                label: t('infoAttention'),
+                value: t('infoLowDpiWarning'),
+                isWarning: true
+            })
+        );
+    }
 
-    infoText.innerHTML = `
-        <div class="metric-card">
-            <span class="metric-label">${t('infoTotalPages')}</span>
-            <div class="metric-value">${model.totalPages} ${t('infoPages')}</div>
-            <div class="metric-subvalue">${gridValue}</div>
-        </div>
-        <div class="metric-card">
-            <span class="metric-label">${t('infoPosterSize')}</span>
-            <div class="metric-value">${model.finalSize.width.toFixed(1)} x ${model.finalSize.height.toFixed(1)} cm</div>
-            <div class="metric-subvalue">${t('infoPageSize')} ${model.pageSizeCm.width} x ${model.pageSizeCm.height} cm</div>
-        </div>
-        <div class="metric-card">
-            <span class="metric-label">${t('infoPrintDpi')}</span>
-            <div class="metric-value">${model.printDpi} DPI</div>
-            <div class="metric-subvalue"><span class="quality-badge ${model.quality.className}">${qualityLabel}</span></div>
-        </div>
-        <div class="metric-card">
-            <span class="metric-label">${t('infoOriginalResolution')}</span>
-            <div class="metric-value">${model.originalResolution.width} x ${model.originalResolution.height} px</div>
-            <div class="metric-subvalue">${t('infoScaledImage')} ${model.scaledImageCm.width} x ${model.scaledImageCm.height} cm</div>
-        </div>
-        <div class="metric-card">
-            <span class="metric-label">${t('infoScaleFactor')}</span>
-            <div class="metric-value">${model.scalePercent}%</div>
-            <div class="metric-subvalue">${t('infoGrid')} ${gridValue}</div>
-        </div>
-        ${lowDpiWarning}
-    `;
+    infoText.replaceChildren(...cards);
 }

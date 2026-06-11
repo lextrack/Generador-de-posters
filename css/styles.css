@@ -286,9 +286,11 @@ h1 {
 .language-group {
     display: inline-flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 10px;
     margin: 0;
-    padding: 7px 9px;
+    padding: 8px 12px;
+    max-width: 100%;
     border-radius: var(--radius-sm);
     background: rgba(244, 247, 255, 0.9);
     border: 1px solid rgba(176, 190, 243, 0.38);
@@ -306,10 +308,15 @@ label {
 .language-group label {
     margin-bottom: 0;
     font-size: 0.82rem;
+    white-space: nowrap;
+    flex: 0 1 auto;
 }
 
 .language-group select {
-    min-width: 102px;
+    min-width: 190px;
+    width: auto;
+    max-width: 100%;
+    flex: 1 1 190px;
     margin-bottom: 0;
     padding: 9px 12px;
     font-size: 0.95rem;
@@ -703,7 +710,18 @@ input[type="range"]:focus {
     }
 
     .language-group {
+        flex-wrap: nowrap;
         justify-content: space-between;
+    }
+
+    .language-group label {
+        white-space: normal;
+    }
+
+    .language-group select {
+        min-width: 0;
+        width: 100%;
+        flex: 1 1 auto;
     }
 
     .hero-section {

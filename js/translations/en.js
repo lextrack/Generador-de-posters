@@ -37,6 +37,8 @@ export const enTranslations = {
     infoQualityLow: 'Low quality',
     alertTooLarge: 'The file is too large. Please choose an image smaller than 50MB.',
     alertTooSmall: 'The image is too small. Please choose an image of at least 100x100 pixels.',
+    alertTooManyPixels: 'The image is too large to process reliably in the browser. Please use a smaller image.',
+    alertInvalidType: 'Unsupported format. Please choose a JPG, PNG, GIF, or WEBP image.',
     alertInvalidImage: 'Image loading error. Please choose a valid image file.',
     alertReadError: 'File read error. Please try again.',
     alertPdfError: 'The PDF could not be generated. Reload the page and try again.',

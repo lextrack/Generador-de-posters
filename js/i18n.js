@@ -1,12 +1,18 @@
 import { downloadBtn, gridSizeSelect, paperSizeSelect } from './dom.js';
 import { enTranslations } from './translations/en.js';
 import { esTranslations } from './translations/es.js';
+import { frTranslations } from './translations/fr.js';
+import { ptTranslations } from './translations/pt.js';
+import { zhTranslations } from './translations/zh.js';
 
 const LANGUAGE_STORAGE_KEY = 'poster_language';
 
 const translations = {
     es: esTranslations,
-    en: enTranslations
+    en: enTranslations,
+    fr: frTranslations,
+    pt: ptTranslations,
+    zh: zhTranslations
 };
 
 let currentLanguage = 'es';
@@ -29,7 +35,11 @@ export function getCurrentLanguage() {
 }
 
 export function getLocale() {
-    return currentLanguage === 'en' ? 'en-US' : 'es-CL';
+    if (currentLanguage === 'en') return 'en-US';
+    if (currentLanguage === 'fr') return 'fr-FR';
+    if (currentLanguage === 'pt') return 'pt-BR';
+    if (currentLanguage === 'zh') return 'zh-CN';
+    return 'es-CL';
 }
 
 function setText(id, value) {
@@ -129,16 +139,30 @@ export function applyTranslations(shouldAnimate = false) {
 }
 
 function getInitialLanguage() {
-    const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    if (saved === 'es' || saved === 'en') return saved;
+    try {
+        const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+        if (saved === 'es' || saved === 'en' || saved === 'fr' || saved === 'pt' || saved === 'zh') return saved;
+    } catch (error) {
+        console.warn('language-storage-read-failed', error);
+    }
+
     const browserLanguage = navigator.language?.toLowerCase() || '';
+    if (browserLanguage.startsWith('zh')) return 'zh';
+    if (browserLanguage.startsWith('fr')) return 'fr';
+    if (browserLanguage.startsWith('pt')) return 'pt';
     return browserLanguage.startsWith('en') ? 'en' : 'es';
 }
 
 export function setLanguage(language) {
-    if (language !== 'es' && language !== 'en') return;
+    if (language !== 'es' && language !== 'en' && language !== 'fr' && language !== 'pt' && language !== 'zh') return;
     currentLanguage = language;
-    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+
+    try {
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+    } catch (error) {
+        console.warn('language-storage-write-failed', error);
+    }
+
     applyTranslations(true);
 }
 

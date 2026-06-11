@@ -21,12 +21,19 @@ Aplicación web para convertir una imagen en un póster dividido en varias pági
 ## Formatos soportados
 
 - Imágenes: `JPG`, `PNG`, `GIF`, `WEBP`
-- Papel: `A4`, `Carta (Letter)`, `A3`
+- Papel: `A4`, `Carta (Letter)` y `A3`
 - Salida: `PDF`
 
 ## Nota de impresión
 
 Para mantener las medidas correctas del póster, imprime el PDF a tamaño real o `100%`.
+
+## Seguridad y despliegue
+
+- La aplicación funciona completamente en el navegador, sin backend ni almacenamiento remoto de imágenes.
+- `jsPDF` se sirve localmente para no depender de un CDN al exportar el PDF.
+- Se aplica una Content Security Policy básica compatible con GitHub Pages.
+- Se validan tamaño, formato y dimensiones de imagen para reducir bloqueos del navegador.
 
 ## Licencia
 
