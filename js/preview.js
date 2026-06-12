@@ -14,7 +14,8 @@ import {
     computePageSlice,
     createRenderJob,
     drawPageSlice,
-    getBatchSize
+    getBatchSize,
+    getPrintableArea
 } from './render-utils.js';
 import { createInfoPanelModel } from './info-panel.js';
 import {
@@ -86,9 +87,21 @@ function createPreviewCell(job, row, col, number) {
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
+    const printableArea = getPrintableArea(job.paperSize);
+    const canvasScale = canvasWidth / job.paperSize.width;
+    ctx.strokeStyle = 'rgba(30, 41, 59, 0.18)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.strokeRect(
+        printableArea.left * canvasScale,
+        printableArea.top * canvasScale,
+        printableArea.width * canvasScale,
+        printableArea.height * canvasScale
+    );
+    ctx.setLineDash([]);
+
     const pageBounds = calculatePageBounds(row, col, job.paperSize);
     const pageSlice = computePageSlice(job.image, pageBounds, job.metrics);
-    const canvasScale = canvasWidth / job.paperSize.width;
     drawPageSlice(ctx, job.image, pageSlice, canvasScale);
 
     const numberDiv = document.createElement('div');

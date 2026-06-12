@@ -9,9 +9,27 @@ export function getSelectedPaperSize(paperSizeKey) {
     return paperSizes[paperSizeKey];
 }
 
+export function getPrintableArea(paperSize) {
+    const margin = paperSize.printMargin || {};
+    const left = margin.left || 0;
+    const top = margin.top || 0;
+    const right = margin.right || 0;
+    const bottom = margin.bottom || 0;
+
+    return {
+        left,
+        top,
+        right,
+        bottom,
+        width: paperSize.width - left - right,
+        height: paperSize.height - top - bottom
+    };
+}
+
 export function calculateRenderMetrics(image, cols, rows, paperSize) {
-    const totalPosterWidth = paperSize.width * cols;
-    const totalPosterHeight = paperSize.height * rows;
+    const printableArea = getPrintableArea(paperSize);
+    const totalPosterWidth = printableArea.width * cols;
+    const totalPosterHeight = printableArea.height * rows;
     const scaleX = totalPosterWidth / image.width;
     const scaleY = totalPosterHeight / image.height;
     const scale = Math.min(scaleX, scaleY);
@@ -29,7 +47,8 @@ export function calculateRenderMetrics(image, cols, rows, paperSize) {
         scaledImageHeight,
         offsetX,
         offsetY,
-        printDpi
+        printDpi,
+        printableArea
     };
 }
 
@@ -57,22 +76,31 @@ export function getBatchSize(totalCells) {
 }
 
 export function calculatePageBounds(row, col, paperSize) {
+    const printableArea = getPrintableArea(paperSize);
     const pageLeft = col * paperSize.width;
     const pageTop = row * paperSize.height;
+    const contentLeft = col * printableArea.width;
+    const contentTop = row * printableArea.height;
 
     return {
         pageLeft,
         pageTop,
         pageRight: pageLeft + paperSize.width,
-        pageBottom: pageTop + paperSize.height
+        pageBottom: pageTop + paperSize.height,
+        contentLeft,
+        contentTop,
+        contentRight: contentLeft + printableArea.width,
+        contentBottom: contentTop + printableArea.height,
+        drawOffsetX: printableArea.left,
+        drawOffsetY: printableArea.top
     };
 }
 
 export function computePageSlice(image, pageBounds, metrics) {
-    const srcLeft = (pageBounds.pageLeft - metrics.offsetX) / metrics.scale;
-    const srcTop = (pageBounds.pageTop - metrics.offsetY) / metrics.scale;
-    const srcRight = (pageBounds.pageRight - metrics.offsetX) / metrics.scale;
-    const srcBottom = (pageBounds.pageBottom - metrics.offsetY) / metrics.scale;
+    const srcLeft = (pageBounds.contentLeft - metrics.offsetX) / metrics.scale;
+    const srcTop = (pageBounds.contentTop - metrics.offsetY) / metrics.scale;
+    const srcRight = (pageBounds.contentRight - metrics.offsetX) / metrics.scale;
+    const srcBottom = (pageBounds.contentBottom - metrics.offsetY) / metrics.scale;
 
     const intersectLeft = Math.max(0, srcLeft);
     const intersectTop = Math.max(0, srcTop);
@@ -85,8 +113,8 @@ export function computePageSlice(image, pageBounds, metrics) {
 
     const sourceWidth = intersectRight - intersectLeft;
     const sourceHeight = intersectBottom - intersectTop;
-    const drawLeft = Math.max(0, metrics.offsetX + intersectLeft * metrics.scale - pageBounds.pageLeft);
-    const drawTop = Math.max(0, metrics.offsetY + intersectTop * metrics.scale - pageBounds.pageTop);
+    const drawLeft = pageBounds.drawOffsetX + Math.max(0, metrics.offsetX + intersectLeft * metrics.scale - pageBounds.contentLeft);
+    const drawTop = pageBounds.drawOffsetY + Math.max(0, metrics.offsetY + intersectTop * metrics.scale - pageBounds.contentTop);
     const drawWidth = sourceWidth * metrics.scale;
     const drawHeight = sourceHeight * metrics.scale;
 
@@ -115,7 +143,7 @@ export function drawPageSlice(ctx, image, slice, targetScale) {
 
 export function calculateFinalSize(job) {
     return {
-        width: (job.paperSize.width * job.cols) / 10,
-        height: (job.paperSize.height * job.rows) / 10
+        width: job.metrics.totalPosterWidth / 10,
+        height: job.metrics.totalPosterHeight / 10
     };
 }

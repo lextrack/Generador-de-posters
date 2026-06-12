@@ -22,6 +22,9 @@ export function createPdfCoverModel(job, locale, translate) {
                 height: (job.paperSize.height / 10).toFixed(1)
             }),
             '',
+            translate('pdfPrintSection'),
+            translate('pdfPrintInstructions'),
+            '',
             translate('pdfFinalSection'),
             translate('pdfPosterSize', {
                 width: finalSize.width.toFixed(1),
