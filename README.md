@@ -44,10 +44,6 @@ These limits help keep the browser responsive while generating previews and PDFs
 - A restrictive Content Security Policy is included for safer static hosting.
 - `jsPDF` is bundled locally, while Bootstrap CSS is loaded from `jsdelivr`.
 
-## Deployment
-
-This project is a static site and can be hosted on platforms such as `GitHub Pages`, `Netlify`, or any simple static web server.
-
 ## Credits
 
 - Inspired by [Block Posters](http://blockposters.com/)
