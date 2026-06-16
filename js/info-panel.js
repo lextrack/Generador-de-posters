@@ -1,15 +1,9 @@
 import { calculateFinalSize } from './render-utils.js';
 
 export function getPrintQuality(printDpi) {
-    if (printDpi < 150) {
-        return { className: 'quality-low', labelKey: 'infoQualityLow', showWarning: true };
-    }
-
-    if (printDpi < 220) {
-        return { className: 'quality-medium', labelKey: 'infoQualityMedium', showWarning: false };
-    }
-
-    return { className: 'quality-good', labelKey: 'infoQualityHigh', showWarning: false };
+    return {
+        showWarning: printDpi < 150
+    };
 }
 
 export function createInfoPanelModel(job) {

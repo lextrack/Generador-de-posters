@@ -33,7 +33,7 @@ export function showControls() {
     downloadSection.style.display = 'block';
 }
 
-function createMetricCard({ label, value, subvalue, badgeClassName, badgeText, isWarning = false }) {
+function createMetricCard({ label, value, subvalue, isWarning = false }) {
     const card = document.createElement('div');
     card.className = isWarning ? 'metric-card warning-card' : 'metric-card';
 
@@ -46,18 +46,6 @@ function createMetricCard({ label, value, subvalue, badgeClassName, badgeText, i
     valueNode.className = 'metric-value';
     valueNode.textContent = value;
     card.appendChild(valueNode);
-
-    if (badgeClassName && badgeText) {
-        const subvalueNode = document.createElement('div');
-        subvalueNode.className = 'metric-subvalue';
-
-        const badge = document.createElement('span');
-        badge.className = `quality-badge ${badgeClassName}`;
-        badge.textContent = badgeText;
-        subvalueNode.appendChild(badge);
-        card.appendChild(subvalueNode);
-        return card;
-    }
 
     if (subvalue) {
         const subvalueNode = document.createElement('div');
@@ -174,7 +162,6 @@ export function updateInfoPanel(job = getCurrentJob()) {
     if (!job) return;
 
     const model = createInfoPanelModel(job);
-    const qualityLabel = t(model.quality.labelKey);
     const gridValue = t('infoGridValue', model.grid);
     const cards = [
         createMetricCard({
@@ -189,9 +176,7 @@ export function updateInfoPanel(job = getCurrentJob()) {
         }),
         createMetricCard({
             label: t('infoPrintDpi'),
-            value: `${model.printDpi} DPI`,
-            badgeClassName: model.quality.className,
-            badgeText: qualityLabel
+            value: `${model.printDpi} DPI`
         }),
         createMetricCard({
             label: t('infoOriginalResolution'),

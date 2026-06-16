@@ -1,45 +1,58 @@
-# Generador de Pósters
+# Poster Generator
 
-Aplicación web para convertir una imagen en un póster dividido en varias páginas imprimibles.
+Web app that turns a single image into a large poster split across multiple printable PDF pages.
 
-## Qué hace
+## Features
 
-- Permite subir una imagen desde el navegador.
-- Divide el póster en cuadrículas desde `2x2` hasta `10x10`.
-- Soporta papel `A4`, `Carta (Letter)` y `A3`.
-- Muestra una vista previa y datos técnicos antes de exportar.
-- Genera un PDF listo para imprimir.
+- Upload an image directly in the browser.
+- Drag and drop or click to select a file.
+- Split the poster into grids from `2x2` up to `10x10`.
+- Export using `A4`, `Letter`, or `A3` paper sizes.
+- Preview every generated page before exporting.
+- Show technical information such as final poster size, scaling, and effective print DPI.
+- Generate a printable PDF with a cover page that includes poster details.
 
-## Cómo usarlo
+## How To Use
 
-1. Sube una imagen.
-2. Elige el tamaño de cuadrícula.
-3. Selecciona el tamaño de papel.
-4. Revisa la vista previa y la información técnica.
-5. Descarga el PDF.
+1. Upload an image.
+2. Choose a grid size.
+3. Choose a paper size.
+4. Review the preview and technical information.
+5. Download the generated PDF.
+6. Print the PDF at actual size and on the same paper format it was generated in.
 
-## Formatos soportados
+## Supported Formats
 
-- Imágenes: `JPG`, `PNG`, `GIF`, `WEBP`
-- Papel: `A4`, `Carta (Letter)` y `A3`
-- Salida: `PDF`
+- Input images: `JPG`, `PNG`, `GIF`, `WEBP`
+- Paper sizes: `A4`, `Letter`, `A3`
+- Output: `PDF`
 
-## Nota de impresión
+## Image Validation
 
-Para mantener las medidas correctas del póster, imprime el PDF a tamaño real o `100%`.
+- Maximum file size: `50 MB`
+- Minimum image dimensions: `100x100 px`
+- Maximum image dimensions: `12000x12000 px`
+- Maximum total pixels: `40,000,000`
 
-## Seguridad y despliegue
+These limits help keep the browser responsive while generating previews and PDFs.
 
-- La aplicación funciona completamente en el navegador, sin backend ni almacenamiento remoto de imágenes.
-- `jsPDF` se sirve localmente para no depender de un CDN al exportar el PDF.
-- Se aplica una Content Security Policy básica compatible con GitHub Pages.
-- Se validan tamaño, formato y dimensiones de imagen para reducir bloqueos del navegador.
+## Privacy And Security
 
-## Licencia
+- The app runs entirely in the browser.
+- No backend or remote image storage is used.
+- Exported PDFs are generated locally with `jsPDF`.
+- A restrictive Content Security Policy is included for safer static hosting.
+- `jsPDF` is bundled locally, while Bootstrap CSS is loaded from `jsdelivr`.
 
-Este proyecto está bajo la licencia MIT.
+## Deployment
 
-## Créditos
+This project is a static site and can be hosted on platforms such as `GitHub Pages`, `Netlify`, or any simple static web server.
 
-- Inspirado en [BlockPoster](http://blockposters.com/)
-- Generación de PDF con [jsPDF](https://github.com/parallax/jsPDF)
+## Credits
+
+- Inspired by [Block Posters](http://blockposters.com/)
+- PDF generation powered by [jsPDF](https://github.com/parallax/jsPDF)
+
+## License
+
+This project is licensed under the MIT License.

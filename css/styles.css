@@ -463,32 +463,6 @@ input[type="range"]:focus {
     line-height: 1.45;
 }
 
-.quality-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6px 10px;
-    border-radius: 999px;
-    font-size: 0.84rem;
-    font-weight: 800;
-    letter-spacing: 0.02em;
-}
-
-.quality-good {
-    background: rgba(22, 155, 98, 0.18);
-    color: #8ef0c2;
-}
-
-.quality-medium {
-    background: rgba(215, 154, 22, 0.2);
-    color: #ffd98a;
-}
-
-.quality-low {
-    background: rgba(197, 75, 89, 0.2);
-    color: #ffadb7;
-}
-
 .warning-card {
     border-color: rgba(255, 206, 108, 0.14);
     background: rgba(255, 191, 86, 0.1);
