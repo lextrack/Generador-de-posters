@@ -38,11 +38,11 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: var(--text);
     background:
-        radial-gradient(circle at top left, rgba(110, 197, 255, 0.16), transparent 26%),
-        radial-gradient(circle at top right, rgba(93, 116, 255, 0.12), transparent 24%),
+        radial-gradient(circle at top left, rgba(110, 197, 255, 0.22), transparent 30%),
+        radial-gradient(circle at top right, rgba(93, 116, 255, 0.18), transparent 28%),
         linear-gradient(180deg, #2a2d47 0%, var(--bg) 100%);
-    background-size: 120% 120%, 130% 130%, 100% 100%;
-    animation: ambientBackdropShift 18s ease-in-out infinite alternate;
+    background-size: 132% 132%, 142% 142%, 100% 100%;
+    animation: ambientBackdropShift 10s ease-in-out infinite alternate;
 }
 
 .page-shell {
@@ -53,26 +53,26 @@ body {
 
 .page-glow {
     position: absolute;
-    width: 280px;
-    height: 280px;
+    width: 330px;
+    height: 330px;
     border-radius: 50%;
-    filter: blur(18px);
-    opacity: 0.45;
+    filter: blur(22px);
+    opacity: 0.56;
     pointer-events: none;
 }
 
 .page-glow-left {
     top: 60px;
     left: 7%;
-    background: rgba(38, 147, 220, 0.22);
-    animation: floatGlowLeft 14s ease-in-out infinite alternate;
+    background: rgba(38, 147, 220, 0.3);
+    animation: floatGlowLeft 8.5s ease-in-out infinite alternate;
 }
 
 .page-glow-right {
     top: 120px;
     right: 8%;
-    background: rgba(130, 117, 255, 0.16);
-    animation: floatGlowRight 16s ease-in-out infinite alternate;
+    background: rgba(130, 117, 255, 0.24);
+    animation: floatGlowRight 9s ease-in-out infinite alternate;
 }
 
 .app-container {
@@ -610,32 +610,32 @@ input[type="range"]:focus {
         background-position: 0% 0%, 100% 0%, 0 0;
     }
     50% {
-        background-position: 12% 8%, 88% 6%, 0 0;
+        background-position: 24% 15%, 76% 12%, 0 0;
     }
     100% {
-        background-position: 7% 16%, 93% 12%, 0 0;
+        background-position: 14% 30%, 86% 24%, 0 0;
     }
 }
 
 @keyframes floatGlowLeft {
     0% {
         transform: translate3d(0, 0, 0) scale(1);
-        opacity: 0.4;
+        opacity: 0.46;
     }
     100% {
-        transform: translate3d(34px, 24px, 0) scale(1.1);
-        opacity: 0.52;
+        transform: translate3d(68px, 44px, 0) scale(1.22);
+        opacity: 0.68;
     }
 }
 
 @keyframes floatGlowRight {
     0% {
         transform: translate3d(0, 0, 0) scale(1);
-        opacity: 0.34;
+        opacity: 0.4;
     }
     100% {
-        transform: translate3d(-38px, 18px, 0) scale(1.12);
-        opacity: 0.46;
+        transform: translate3d(-72px, 36px, 0) scale(1.24);
+        opacity: 0.62;
     }
 }
 
